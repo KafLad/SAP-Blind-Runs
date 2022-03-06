@@ -14,6 +14,8 @@ foodShopAdd1 = []
 rollCoord = []
 freezeCoord = []
 excessGoldCoord = []
+sellCoords = []
+petCount = 0
 
 
 def ResolutionSetup():
@@ -35,7 +37,7 @@ def ResolutionSetup():
 
 
 def HDPosSetup():
-    global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord
+    global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord, sellCoords
 
     # Main UI Initialization
     tChoices = [ [504, 965], [1122, 945], [1648, 953] ]
@@ -45,6 +47,8 @@ def HDPosSetup():
     rollCoord = [ 247, 1513 ]
     freezeCoord = [ 1103, 1568] 
     excessGoldCoord = [ 1237, 1228 ]
+    sellCoords = freezeCoord
+
 
     # Shop UI Initialization [Including shop scaling for later]
     petShopInit = [ [541, 1239] , [674, 1222] , [817, 1226] ]
@@ -57,7 +61,7 @@ def HDPosSetup():
 
 
 def FWPosSetup():
-    global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord
+    global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord, sellCoords
 
     # Main UI Initialization
     tChoices = [ [498, 601], [1143, 575], [1906, 585] ]
@@ -65,8 +69,10 @@ def FWPosSetup():
     endTurn = [ 1983, 1291 ]
     pets = [ [1265, 624] , [1128, 632], [951, 625], [800, 632], [618, 631] ]
     rollCoord = [300, 1290]
-    freezeCoord = [] # <-- This is still unknown on the framework
+    freezeCoord = [1245, 1275] # <-- This is still unknown on the framework
     excessGoldCoord = [ 1509, 899 ]
+    sellCoords = freezeCoord 
+
 
     # Shop UI Initialization [Including shop scaling for later]
     petShopInit = [ [620, 965] , [801, 953] , [958, 955] ]
@@ -110,6 +116,7 @@ def Shuffle(numShuffles):
         pa.moveTo(pos2[0], pos2[1])
         pa.click()
     pa.moveTo(endTurn[0],endTurn[1])
+    time.sleep(1)
     pa.click()
     pa.moveTo(excessGoldCoord[0], excessGoldCoord[1])
     time.sleep(0.5)
@@ -117,7 +124,7 @@ def Shuffle(numShuffles):
 
 
 def ShopTime(turn):
-    global petShopInit, petShopAdd1, petShopAdd2, pets, foodShopInit, foodShopAdd1
+    global petShopInit, petShopAdd1, petShopAdd2, pets, foodShopInit, foodShopAdd1, petCount, freezeCoord
 
     # Coordinate Updating & Variable Initialization
 
@@ -134,10 +141,13 @@ def ShopTime(turn):
 
     # Actual loop
     while gold > 0:
+        time.sleep(0.1)
         if turn != 1:
             purchaseType = r.randint(0,2)
         else:
                 purchaseType = 1
+
+    
         if purchaseType == 0:
             # Roll
             print("Rolling . . .")
@@ -145,8 +155,21 @@ def ShopTime(turn):
             pa.click()
             time.sleep(0.75)
             gold -= 1
+    
         elif purchaseType == 1:
             # Pet
+            if petCount == 5:
+                print("Selling Pet . . .")
+                petSell = r.randint(0, len(coords) - 1)
+                pa.moveTo(coords[petSell][0], coords[petSell][1])
+                pa.click()
+                time.sleep(0.15)
+                pa.moveTo(freezeCoord[0], freezeCoord[1])
+                pa.click()
+                gold += 1
+                petCount -= 1
+            
+            time.sleep(1)
             print("Buying Pet . . .")
             pet = r.randint(0, len(petCoords) - 1)
             pa.moveTo(petCoords[pet][0], petCoords[pet][1])
@@ -156,6 +179,8 @@ def ShopTime(turn):
             pa.moveTo(coords[teamSlot][0], coords[teamSlot][1])
             pa.click()
             gold -= 3
+            petCount += 1
+
         else:
             # Food
             print("Buying Food . . .")
@@ -171,6 +196,10 @@ def ShopTime(turn):
            
 
 
+
+
+
+
 if __name__ == "__main__":
     ResolutionSetup()
     time.sleep(1)
@@ -178,8 +207,9 @@ if __name__ == "__main__":
 
     while turn < 100:
         print(f"\nBeginning Turn {turn}!\n")
+        time.sleep(0.25)
         ShopTime(turn)
-        shuffling = r.randint(10,20)
+        shuffling = r.randint(5,15)
         Shuffle(shuffling)
         time.sleep(5)
         if turn == 1:
