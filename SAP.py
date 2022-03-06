@@ -1,8 +1,31 @@
+########################################################################################
+#   Super Auto Pets - Blind Computer Player Project                                    #
+#                                                                                      #
+#   File: SAP.py                                                                       #
+#                                                                                      #
+#   Written By: Ethan Gray                                                             #
+#   Copyright 2022, Ethan Gray, All Rights Reserved                                    #
+#                                                                                      #
+#   About: A simple, primitive, blind, computer randomizer that plays Super Auto Pets. #
+#          Granted, it plays it quite poorly, but it plays it!                         #
+########################################################################################
+
+
+###############
+#   IMPORTS   #
+###############
+
 import pyautogui as pa
 import time
 import random as r
 
-# Global Variables
+
+#################
+#    GLOBAL     #
+#   VARIABLES   #
+#################
+
+# Global Variables -- These are altered by the specific screen setup [ATM is hard-coded to the 2 setups I have, but planned to be dynamically updated]
 tChoices = []
 bChoices = []
 endTurn = []
@@ -18,7 +41,17 @@ sellCoords = []
 petCount = 0
 
 
+###################
+#    FUNCTIONS   #
+##################
+
 def ResolutionSetup():
+    """
+        Ask the user for their resolution size. As of V1.1, the program is only designed for the 2 setups I have (laptop and desktop).
+        Planned to work dynamically with a GUI once the program is functional. 
+    """
+
+
     print("Choose which screensize you currently have")
     size = int(input("(1920x1080 = 1 | Framework Laptop = 2): "))
     valids = [1, 2]
@@ -37,6 +70,9 @@ def ResolutionSetup():
 
 
 def HDPosSetup():
+    """
+        Updates the global variables for the desktop monitor setup
+    """
     global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord, sellCoords
 
     # Main UI Initialization
@@ -58,9 +94,12 @@ def HDPosSetup():
     foodShopAdd1 =   [1259, 1261 ]
 
 
-
-
 def FWPosSetup():
+    """
+        Updates the global variables for the laptop setup.
+    """
+
+
     global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord, sellCoords
 
     # Main UI Initialization
@@ -69,7 +108,7 @@ def FWPosSetup():
     endTurn = [ 1983, 1291 ]
     pets = [ [1265, 624] , [1128, 632], [951, 625], [800, 632], [618, 631] ]
     rollCoord = [300, 1290]
-    freezeCoord = [1245, 1275] # <-- This is still unknown on the framework
+    freezeCoord = [1245, 1275] 
     excessGoldCoord = [ 1509, 899 ]
     sellCoords = freezeCoord 
 
@@ -83,6 +122,12 @@ def FWPosSetup():
 
 
 def TeamName():
+    """
+        Has the computer randomly choose a team name for the game.
+        [Uses the tChoices and bChoices global position variables to know where it needs to go.]
+    """
+
+
     global tChoices, bChoices
 
     topChoices = tChoices
@@ -97,9 +142,12 @@ def TeamName():
     pa.click()
 
 
-
-
 def Shuffle(numShuffles):
+    """
+        Randomly shuffles the team and then ends the turn.
+    """
+
+
     global pets, excessGoldCoord
 
 
@@ -124,6 +172,12 @@ def Shuffle(numShuffles):
 
 
 def ShopTime(turn):
+    """
+        Decides what items to buy, dynamically updates the shop coordinates with when the game updates the shop.
+        [In time, this function will be split up into several smaller functions to make sure things are easier to read.]
+    """
+
+
     global petShopInit, petShopAdd1, petShopAdd2, pets, foodShopInit, foodShopAdd1, petCount, freezeCoord
 
     # Coordinate Updating & Variable Initialization
@@ -196,9 +250,10 @@ def ShopTime(turn):
            
 
 
-
-
-
+#############
+#   MAIN    #
+#   LOOP    #
+#############
 
 if __name__ == "__main__":
     ResolutionSetup()
