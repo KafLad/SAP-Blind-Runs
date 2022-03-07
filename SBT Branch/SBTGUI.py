@@ -6,6 +6,7 @@
 
 import tkinter as tk
 from tkinter import font as tkfont
+import time
 
 class BotApp(tk.Tk):
 
@@ -56,17 +57,36 @@ class StartPage(tk.Frame):
 
 ### This page will serve as a means to dynamically locate where the mouse should be moving to
 class LocationSetup(tk.Frame):
+    state = 'startup'
 
     def __init__(self, parent, controller):
+        print("LocationSetup has been started!")
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is the Location Setup Page", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
+        label2 = tk.Label(self, text="")
         button = tk.Button(self, text="Go to the start page",
                             command=lambda: controller.show_frame("StartPage"))
+
+
+        self.state = 'startup'
+
         
         button.pack()
 
+    def loop(self):
+        print(f"{self.state}")
+        if self.state=='startup':
+            self.label2.text = ""
+        elif self.state == 'running':
+            self.label2.text = "Key has been pressed!"
+
+    def key(self, event):
+        if self.state == 'startup':
+            self.state = 'running'
+            time.sleep(1)
+            self.state = 'startup'
 
 ### This page will serve as a GUI indicator of what the bot is doing as well as a place to start running the script
 class RunGame(tk.Frame):

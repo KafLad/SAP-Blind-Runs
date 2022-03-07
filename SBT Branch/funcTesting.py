@@ -60,4 +60,3 @@ def FWPosSetup():
 def SmartShop():
     time.sleep(5)
     
-    
