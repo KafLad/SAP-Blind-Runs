@@ -1,6 +1,6 @@
 <html>
 
-<h1>
+<h1 alig="center">
 Super Auto Pets "Blind" Bot
 </h1>
 
