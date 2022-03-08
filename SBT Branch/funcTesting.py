@@ -23,6 +23,7 @@ freezeCoord = []
 excessGoldCoord = []
 sellCoords = []
 petCount = 0
+currSlots = {0: False, 1: False, 2: False, 3: False, 4: False}
 
 
 
