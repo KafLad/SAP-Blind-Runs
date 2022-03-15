@@ -12,7 +12,7 @@ import pyautogui as pag
 from PIL import ImageGrab
 
 
-def DetectImages(largeImage='SBT Branch/openCV Testing/Photos/SAPImg.png', detectingImage='SBT Branch/openCV Testing/Photos/lvl.png', thresh=0.8, debug=False):
+def DetectImages(largeImage='SBT Branch/openCV Testing/Photos/SAPImg.png', detectingImage='SBT Branch/openCV Testing/Photos/lvl.png', thresh=0.8, debug=False, usingCVArr = False):
     """
         largeImage -> str\n
         detectingImage -> str\n
@@ -22,10 +22,12 @@ def DetectImages(largeImage='SBT Branch/openCV Testing/Photos/SAPImg.png', detec
         For display purposes, the image variables are set to a Super Auto Pets game example looking for the lvl 1 symbols.
         If debug is set to True, then it will also display the visual rectangles & points to be clicked within the larger image.
     """
-    # Import images
-    screen = cv.imread(largeImage, cv.IMREAD_REDUCED_COLOR_2)
-    level = cv.imread(detectingImage, cv.IMREAD_REDUCED_COLOR_2)
-
+    if not usingCVArr:
+        # Import images
+        screen = cv.imread(largeImage, cv.IMREAD_REDUCED_COLOR_2)
+        level = cv.imread(detectingImage, cv.IMREAD_REDUCED_COLOR_2)
+    else:
+        level = cv.imread(detectingImage, cv.IMREAD_UNCHANGED)
     # Get width & height of searched image
     levelW = level.shape[1]
     levelH = level.shape[0]
@@ -88,7 +90,7 @@ def DetectImages(largeImage='SBT Branch/openCV Testing/Photos/SAPImg.png', detec
         points.append(-1)
         return points
 
-def LiveFeed():
+def LiveFeed(display = False):
     loopTime = time()
     while(True):
         # Take screenshot w/ PyAutoGUI and convert the color to be correct
@@ -97,7 +99,8 @@ def LiveFeed():
         screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
 
         # Display the image
-
+        if display:
+            cv.imshow('Game', screenshot)
         print(f"FPS {(1 / (time() - loopTime))}")
         loopTime = time()
 
@@ -106,3 +109,7 @@ def LiveFeed():
         if cv.waitKey(1) == ord('q'):
             break
     
+
+if __name__ == "__main__":
+    points = DetectImages(debug=True)
+    #LiveFeed()
