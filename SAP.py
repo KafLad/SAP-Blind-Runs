@@ -264,7 +264,7 @@ if __name__ == "__main__":
         print(f"\nBeginning Turn {turn}!\n")
         time.sleep(0.25)
         ShopTime(turn)
-        shuffling = r.randint(5,15)
+        shuffling = 5
         Shuffle(shuffling)
         time.sleep(5)
         if turn == 1:
@@ -273,8 +273,8 @@ if __name__ == "__main__":
         pa.click()
 
 
-        for i in range(15):
-            time.sleep(1)
+        for i in range(30):
+            time.sleep(2)
             pa.moveTo(excessGoldCoord)
             pa.click()
 
