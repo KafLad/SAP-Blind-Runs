@@ -1,86 +1,85 @@
 import cv2 as cv
 import numpy as np
 
-class Vision():
-    image = None
+class Vision:
 
-    def DetectImages(self, largeImage='SBT Branch/openCV Testing/Photos/SAPImg.png', detectingImage='SBT Branch/openCV Testing/Photos/lvl.png', thresh=0.8, debug=False, usingCVArr = False):
-        """
-            largeImage -> str\n
-            detectingImage -> str\n
-            thresh -> float\n
-            debug -> bool\n
-            Returns a list of points to click based off a theshold value given. By default, the threshold is set to 0.8.
-            For display purposes, the image variables are set to a Super Auto Pets game example looking for the lvl 1 symbols.
-            If debug is set to True, then it will also display the visual rectangles & points to be clicked within the larger image.
-        """
+    # properties
+    needle_img = None
+    needle_w = 0
+    needle_h = 0
+    method = None
 
-        if not usingCVArr:
-            # Import images
-            screen = cv.imread(largeImage, cv.IMREAD_REDUCED_COLOR_2)
-            level = cv.imread(detectingImage, cv.IMREAD_REDUCED_COLOR_2)
-        else:
-            screen = self.image
-            level = cv.imread(detectingImage, cv.IMREAD_UNCHANGED)
-            cv.imshow('Test', screen)
-        # Get width & height of searched image
-        levelW = level.shape[1]
-        levelH = level.shape[0]
+    # constructor
+    def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED):
+        # load the image we're trying to match
+        self.needle_img = cv.imread(needle_img_path, cv.IMREAD_COLOR)
 
-        # Check where level is within screen
-        result = cv.matchTemplate(screen, level, cv.TM_CCOEFF_NORMED)
+        # save the dimensions of the needle image
+        self.needle_w = self.needle_img.shape[1]
+        self.needle_h = self.needle_img.shape[0]
 
-        # Set up the confidence threshold
-        threshold = thresh
+        # there are 6 methods to choose from:
+        # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
+        self.method = method
 
-        # Find where the most confident image replicas are located by looking @ whitest pixels in result image
+    def find(self, haystack_img, threshold=0.5, debug_mode=None, test=False):
+        # run the OpenCV algorithm        
+        result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
+
+        # Get the all the positions from the match result that exceed our threshold
         locations = np.where(result >= threshold)
-        # Convert np matrix to an array of x,y coord tuples
-        locations = list(zip(*locations[::-1])) 
+        locations = list(zip(*locations[::-1]))
+        #print(locations)
 
-        # Make a list of rectangle coords to be grouped together to avoid overlapping rectangles
+        # You'll notice a lot of overlapping rectangles get drawn. We can eliminate those redundant
+        # locations by using groupRectangles().
+        # First we need to create the list of [x, y, w, h] rectangles
         rectangles = []
         for loc in locations:
-            rect = [int(loc[0]), int(loc[1]), levelW, levelH]
-            # Append each rectangle TWICE, bc otherwise any single-rectangles will be deleted when grouped together bc that's how it works
+            rect = [int(loc[0]), int(loc[1]), self.needle_w, self.needle_h]
+            # Add every box to the list twice in order to retain single (non-overlapping) boxes
             rectangles.append(rect)
             rectangles.append(rect)
+        # Apply group rectangles.
+        # The groupThreshold parameter should usually be 1. If you put it at 0 then no grouping is
+        # done. If you put it at 2 then an object needs at least 3 overlapping rectangles to appear
+        # in the result. I've set eps to 0.5, which is:
+        # "Relative difference between sides of the rectangles to merge them into a group."
+        rectangles, weights = cv.groupRectangles(rectangles, groupThreshold=1, eps=0.5)
+        #print(rectangles)
 
-        # Change the rectangles array to be the grouped together array
-        rectangles, weights = cv.groupRectangles(rectangles, 1, 0.5)
-
-        # Create the array that will be returned
         points = []
+        if len(rectangles):
+            #print('Found needle.')
 
-        # Run through loop if there are rectangles found
-        if locations:
-            lineColor = (0,0,255)
-            lineType = cv.LINE_4
-            markerColor = (255,0,0)
+            line_color = (0, 255, 0)
+            line_type = cv.LINE_4
+            marker_color = (255, 0, 255)
+            marker_type = cv.MARKER_CROSS
 
-            # Loop thru each rectangle location and draw it
-            for (x,y,width,height) in rectangles:
-                # Determine the location for the box
-                top_left = (x,y)
-                bottom_right = (x + width, y + height)
-                # Draw
-                cv.rectangle(screen, top_left, bottom_right,lineColor, lineType)
+            # Loop over all the rectangles
+            for (x, y, w, h) in rectangles:
 
-                # Get a position within the rectangle itself to click
-                    # TO DO: Make the position random, to avoid bot detection or something like that
-                centerX = x + int(width/2)
-                centerY = y + int(height/2)
-                point = [centerX, centerY]
-                points.append(point)
-                cv.drawMarker(screen, (centerX, centerY), markerColor, markerType=0)
+                # Determine the center position
+                center_x = x + int(w/2)
+                center_y = y + int(h/2)
+                # Save the points
+                points.append((center_x, center_y))
 
-            if debug:
-                cv.imshow('Matches', screen)
-                cv.waitKey()
-                cv.destroyAllWindows()
+                if debug_mode == 'rectangles':
+                    # Determine the box position
+                    top_left = (x, y)
+                    bottom_right = (x + w, y + h)
+                    # Draw the box
+                    cv.rectangle(haystack_img, top_left, bottom_right, color=line_color, 
+                                lineType=line_type, thickness=2)
+                elif debug_mode == 'points':
+                    # Draw the center point
+                    cv.drawMarker(haystack_img, (center_x, center_y), 
+                                color=marker_color, markerType=marker_type, 
+                                markerSize=40, thickness=2)
 
-            return points
-        else:
-            print("No level 1 pets found")
-            points.append(-1)
-            return points
+        if debug_mode:
+            cv.imshow('Matches', haystack_img)
+
+        return points
