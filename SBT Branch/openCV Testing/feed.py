@@ -2,7 +2,7 @@ import numpy as np
 import win32ui, win32gui, win32con
 import pyautogui as pag
 import cv2 as cv
-
+import screeninfo as si
 
 class WindowCapture:
     w = 0
@@ -12,9 +12,22 @@ class WindowCapture:
     cropped_y = 0
     offset_x = 0
     offset_y = 0
+    windowX = 0
+    windowY = 0
 
     # Constructor for Window-Specific Capture
     def __init__(self, windowName=None):
+        screens = []
+        for m in si.get_monitors():
+            info = [m.is_primary, m.width, m.height]
+            screens.append(info)
+        for i in screens:
+            if i[0] == True:
+                print(i)
+                self.windowX = i[1] - 1200
+                self.windowY = i[2] - 600
+                print(f"Window size: {self.windowX}, {self.windowY}")
+
         if windowName != None:
             # Find the window
             self.hwnd = win32gui.FindWindow(None, windowName)
@@ -67,7 +80,7 @@ class WindowCapture:
     def GetStaticScreenshot(self):
         screen = pag.screenshot()
         screenArr = np.array(screen)
-        cropped = screenArr[:620, 1120:, :]
+        cropped = screenArr[:self.windowY, self.windowX:, :]
         img = cv.cvtColor(cropped, cv.COLOR_RGB2BGR)
         return img
 
