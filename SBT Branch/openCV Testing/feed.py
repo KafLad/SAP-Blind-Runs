@@ -23,10 +23,8 @@ class WindowCapture:
             screens.append(info)
         for i in screens:
             if i[0] == True:
-                print(i)
                 self.windowX = i[1] - 1200
                 self.windowY = i[2] - 600
-                print(f"Window size: {self.windowX}, {self.windowY}")
 
         if windowName != None:
             # Find the window
@@ -80,7 +78,7 @@ class WindowCapture:
     def GetStaticScreenshot(self):
         screen = pag.screenshot()
         screenArr = np.array(screen)
-        cropped = screenArr[0:600, 0:800, :]
+        cropped = screenArr[40:600, 0:800, :]
         img = cv.cvtColor(cropped, cv.COLOR_RGB2BGR)
         return img
 

@@ -8,12 +8,20 @@ class Vision:
     needle_w = 0
     needle_h = 0
     method = None
+    txt = 'null'
 
     # constructor
-    def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED):
+    def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED, text='null'):
         # load the image we're trying to match
         self.needle_img = cv.imread(needle_img_path, cv.IMREAD_COLOR)
-
+        if text == 'null':
+            self.txt = needle_img_path.split('.')
+            self.txt = self.txt[0]
+            self.txt = self.txt.split('\\')
+            self.txt = self.txt[2]
+        else:
+            self.txt = text.split('.')
+            self.txt = self.txt[0]
         # save the dimensions of the needle image
         self.needle_w = self.needle_img.shape[1]
         self.needle_h = self.needle_img.shape[0]
@@ -22,10 +30,25 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
+    def draw_text(self, img, text='null',
+            font=cv.FONT_HERSHEY_COMPLEX_SMALL,
+            pos=(0, 0),
+            font_scale=0.5,
+            font_thickness=1,
+            text_color=(255, 255, 255),
+            text_color_bg=(0, 0, 0)
+            ):
+        text = self.txt
+        x, y = pos
+        text_size, _ = cv.getTextSize(text, font, font_scale, font_thickness)
+        text_w, text_h = text_size
+        cv.rectangle(img, pos, (x + text_w, y + text_h), text_color_bg, -1)
+        cv.putText(img, text, (x, int(y + text_h + font_scale - 1)), font, font_scale, text_color, font_thickness)
+        return text_size
+
     def find(self, haystack_img, threshold=0.5, debug_mode=None, test=False, type='Default'):
         # run the OpenCV algorithm        
         result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
-
         # Get the all the positions from the match result that exceed our threshold
         locations = np.where(result >= threshold)
         locations = list(zip(*locations[::-1]))
@@ -54,10 +77,9 @@ class Vision:
         elif type == 'Pet':
             line_color = (128, 0, 128)
         elif type == 'Food':
-            line_color = (255, 255, 0)
+            line_color = (0, 0, 0)
         elif type == 'Team':
             line_color = (255,0,0)
-
 
 
         points = []
@@ -75,13 +97,7 @@ class Vision:
                 center_y = y + int(h/2)
 
                 # Save the points
-                if type=='Team':
-                    if center_x < 300:
-                        points.append((center_x, center_y))
-                    else:
-                        rectangles.remove((x, y, w, h))
-                else:   
-                    points.append((center_x, center_y))
+                points.append((center_x, center_y))
 
                 if debug_mode == 'rectangles':
                     # Determine the box position
@@ -90,6 +106,8 @@ class Vision:
                     # Draw the box
                     cv.rectangle(haystack_img, top_left, bottom_right, color=line_color, 
                                 lineType=line_type, thickness=2)
+                    # cv.putText(haystack_img, self.txt, top_left, cv.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 0), 1, cv.LINE_AA, False)
+                    self.draw_text(img=haystack_img, pos=top_left, text_color_bg=line_color)
                 elif debug_mode == 'points':
                     # Draw the center point
                     cv.drawMarker(haystack_img, (center_x, center_y), 
@@ -99,4 +117,4 @@ class Vision:
         if debug_mode:
             cv.imshow('Matches', haystack_img)
 
-        return points
+        return self.txt, points
