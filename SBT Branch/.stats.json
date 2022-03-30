@@ -1,0 +1,301 @@
+{
+    "Pets":
+    {
+        "Ant":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Badger":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Beaver":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Bison":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Camel":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Crab":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Cricket":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Deer":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Dodo":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Dolphin":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Duck":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Elephant":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Fish":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Flamingo":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Giraffe":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Hedgehog":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Horse":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Kangaroo":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Mosquito":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Otter":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Ox":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Parrot":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Peacock":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Penguin":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Pig":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Pufferfish":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Rabbit":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Rat":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Rooster":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Sheep":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Shrimp":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Skunk":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Snail":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],  
+        "Spider":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ], 
+        "Swan":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Turtle":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ],
+        "Worm":
+        [
+            {
+                "times_bought": 0,
+                "rounds_won": 0,
+                "games_won": 0
+            }
+        ]
+    }
+}
