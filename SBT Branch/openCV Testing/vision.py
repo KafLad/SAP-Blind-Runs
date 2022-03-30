@@ -22,7 +22,7 @@ class Vision:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
 
-    def find(self, haystack_img, threshold=0.5, debug_mode=None, test=False):
+    def find(self, haystack_img, threshold=0.5, debug_mode=None, test=False, type='Default'):
         # run the OpenCV algorithm        
         result = cv.matchTemplate(haystack_img, self.needle_img, self.method)
 
@@ -48,23 +48,40 @@ class Vision:
         rectangles, weights = cv.groupRectangles(rectangles, groupThreshold=1, eps=0.5)
         #print(rectangles)
 
+        # Choose the line color
+        if type == 'Default' or type == 'UI':
+            line_color = (0, 255, 0)
+        elif type == 'Pet':
+            line_color = (128, 0, 128)
+        elif type == 'Food':
+            line_color = (255, 255, 0)
+        elif type == 'Team':
+            line_color = (255,0,0)
+
+
+
         points = []
         if len(rectangles):
             #print('Found needle.')
-
-            line_color = (0, 255, 0)
             line_type = cv.LINE_4
             marker_color = (255, 0, 255)
             marker_type = cv.MARKER_CROSS
 
             # Loop over all the rectangles
             for (x, y, w, h) in rectangles:
-
+                
                 # Determine the center position
                 center_x = x + int(w/2)
                 center_y = y + int(h/2)
+
                 # Save the points
-                points.append((center_x, center_y))
+                if type=='Team':
+                    if center_x < 300:
+                        points.append((center_x, center_y))
+                    else:
+                        rectangles.remove((x, y, w, h))
+                else:   
+                    points.append((center_x, center_y))
 
                 if debug_mode == 'rectangles':
                     # Determine the box position

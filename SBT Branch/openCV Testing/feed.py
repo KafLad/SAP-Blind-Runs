@@ -80,7 +80,7 @@ class WindowCapture:
     def GetStaticScreenshot(self):
         screen = pag.screenshot()
         screenArr = np.array(screen)
-        cropped = screenArr[:self.windowY, self.windowX:, :]
+        cropped = screenArr[0:600, 0:800, :]
         img = cv.cvtColor(cropped, cv.COLOR_RGB2BGR)
         return img
 
