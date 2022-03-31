@@ -3,20 +3,60 @@
 #   * Make a function called ConfidenceCalc() that runs in __init__
 #       * This will set the confidence value for each pet on startup and use that data for the round, it will then update the JSON values afterwards 
 #   * Hook up the JSON file to the Buy() function that way it can be tested
-
+import math
 import pyautogui as pag
 import random as rand
+import json
 
 class Logic:
     topNames = [[118, 242] , [333, 255], [750, 247]]
     botNames = [[97, 396], [414, 408], [660, 407]]
+    currentTeam = []
     turn = 1
     health = 10
     coins = 10
+    petKeys = []
+    petData = []
+    petDict = {}
+    confidenceVals = []
 
     def __init__(self):
+        self.LoadStats()
+        self.CalculateConfidence()
         print("Logic Unit Initiated!")
 
+
+    def LoadStats(self):
+        f = open('SBT Branch\\.stats.json')
+        data = json.load(f)
+        for i in data['Pets']:
+            self.petKeys.append(i)
+        for i in range(0, len(self.petKeys)):
+            self.petData.append(data['Pets'][self.petKeys[i]])
+
+        
+    
+    def CalculateConfidence(self):
+        for i in range(len(self.petKeys)):
+            bought = self.petData[i][0]['times_bought']
+            roundWins = self.petData[i][0]['rounds_won']
+            roundLoss = self.petData[i][0]['rounds_lost']
+            gameWins = self.petData[i][0]['games_won']
+
+            b = bought % 3
+            if b == 0:
+                b = bought / 3
+            r = roundWins % 5
+            if r == 0:
+                r = roundWins / 5
+            l = roundLoss % 10
+            if l == 0:
+                l = roundLoss / 10
+            g = gameWins * 10
+
+            confidence = float(((b + r + g) - l)/ 100)
+            self.confidenceVals.append(confidence)
+        
     def Buy(self, shopCoords, shopPets, teamCoords, teamNames):
         # TODO: For loop that reads the file of pet stats and puts confidence value into list
         # altNames = teamNames
@@ -37,4 +77,9 @@ class Logic:
             i += 1            
             # This loop is relatively pointless for now, but will be useful later to filter out which items in the shop the bot will consider to buy
 
-        
+    def UpdateStats(self, result):
+        if result == 'Victory':
+            for i in range(len(self.currentTeam)):
+                print("E")
+if __name__ == "__main__":
+    logi = Logic()
