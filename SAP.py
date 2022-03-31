@@ -76,22 +76,22 @@ def HDPosSetup():
     global tChoices, bChoices, endTurn, pets, petShopInit, petShopAdd1, petShopAdd2, foodShopInit, foodShopAdd1, rollCoord, freezeCoord, excessGoldCoord, sellCoords
 
     # Main UI Initialization
-    tChoices = [ [504, 965], [1122, 945], [1648, 953] ]
-    bChoices = [ [384, 1244], [1053, 1233], [1618, 1228] ]
-    endTurn = [ 1653, 1538 ]
-    pets = [ [508, 973] , [672, 960], [852, 945], [990, 942], [1073, 944] ]
-    rollCoord = [ 247, 1513 ]
-    freezeCoord = [ 1103, 1568] 
-    excessGoldCoord = [ 1237, 1228 ]
+    tChoices = [ [504, 465], [1122, 445], [1648, 453] ]
+    bChoices = [ [384, 744], [1053, 733], [1618, 728] ]
+    endTurn = [ 1653, 938 ]
+    pets = [ [508, 473] , [672, 460], [852, 445], [990, 442], [1073, 444] ]
+    rollCoord = [ 247, 1013 ]
+    freezeCoord = [ 1103, 1068] 
+    excessGoldCoord = [ 1237, 628 ]
     sellCoords = freezeCoord
 
 
     # Shop UI Initialization [Including shop scaling for later]
-    petShopInit = [ [541, 1239] , [674, 1222] , [817, 1226] ]
-    petShopAdd1 =  [977, 1219]
-    petShopAdd2 = [1115, 1227]
-    foodShopInit =  [ [1403, 1248] ]
-    foodShopAdd1 =   [1259, 1261 ]
+    petShopInit = [ [541, 739] , [674, 722] , [817, 726] ]
+    petShopAdd1 =  [977, 719]
+    petShopAdd2 = [1115, 727]
+    foodShopInit =  [ [1403, 748] ]
+    foodShopAdd1 =   [1259, 761 ]
 
 
 def FWPosSetup():
@@ -108,7 +108,7 @@ def FWPosSetup():
     endTurn = [ 1983, 1291 ]
     pets = [ [1265, 624] , [1128, 632], [951, 625], [800, 632], [618, 631] ]
     rollCoord = [300, 1290]
-    freezeCoord = [1245, 1275] 
+    freezeCoord = [1245, 775] 
     excessGoldCoord = [ 1509, 899 ]
     sellCoords = freezeCoord 
 
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         pa.click()
 
 
-        for i in range(30):
+        for i in range(10):
             time.sleep(2)
             pa.moveTo(excessGoldCoord)
             pa.click()
